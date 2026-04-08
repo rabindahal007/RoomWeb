@@ -1,9 +1,12 @@
 import { useParams } from "react-router-dom";
 import rooms from "../data/rooms";
+import ContactForm from "../components/ContactForm";
+import { useState } from "react";
 
 export default function RoomDetails() {
   const { id } = useParams();
   const room = rooms.find(r => r.id === parseInt(id));
+  const [showForm, setShowForm] = useState(false);
 
   if (!room) return <p className="p-6">Room not found</p>;
 
@@ -95,11 +98,29 @@ export default function RoomDetails() {
             WhatsApp: +82 10-1234-5678
           </p>
 
-          <button className="w-full bg-rose-500 text-white py-2 rounded-xl hover:bg-rose-600 transition">
-            Reserve
+          <button className="w-full bg-rose-500 text-white py-2 rounded-xl hover:bg-rose-600 transition" onClick={() => setShowForm(true)}>
+            Contact now
           </button>
+          {showForm && (
+  <ContactForm 
+    onClose={() => setShowForm(false)} 
+    room={room} 
+  />
+)}
 
         </div>
+        <div className="space-y-2">
+  <h2 className="text-lg font-semibold">Location</h2>
+
+  <div className="w-full h-64 rounded-2xl overflow-hidden">
+    <iframe
+      src={room.location_map}
+      className="w-full h-full border-0"
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+</div>
 
       </div>
     </div>
